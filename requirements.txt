@@ -1,0 +1,12 @@
+# Flask-JWT-Extended
+# Flask-RESTful
+# Flask-SQLAlchemy
+# Flask-MySQL
+# Flask-Cors
+# python-dotenv
+
+seaborn==0.9.0
+matplotlib==3.0.2
+pandas==0.23.4
+numpy==1.17.3
+scikit_learn==0.21.3
