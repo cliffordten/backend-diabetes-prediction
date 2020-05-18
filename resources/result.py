@@ -41,27 +41,29 @@ class GetTodayResult(Resource):
      @jwt_required
      def get(self):
         user_id = get_jwt_identity()[0]
+        user_email = get_jwt_identity()[1]
         
-        _id =''
+        todayResults = []
 
         user = UserModel.find_by_id(user_id)
         doc = DocModel.find_by_id(user_id)
 
-        if user:
-            _id = "pat_" + str(user_id)
-        
-        if doc:
-            _id = "doc_" + str(user_id)
-        
-        results = [x.jsonAll(_id) for x in ResultModel.find_by_date(str(date.today()))]
-        todayResults = []
+        user_e = UserModel.find_by_email(user_email)
+        doc_e = DocModel.find_by_email(user_email)
 
-        # return results
-        for result in results:
-
-            x_id = result['user_id'].split("_")[1]
-            if(user_id == int(x_id)):
-                todayResults.append(result)
+        if user and user_e:
+            results = [x.jsonAll_pat() for x in ResultModel.find_by_date(str(date.today()))]
+            for result in results:
+                x_id = result['user_id']
+                if(user_id == x_id):
+                    todayResults.append(result)
+            
+        if doc and doc_e:
+            results = [x.jsonAll_doc() for x in ResultModel.find_by_date(str(date.today()))]
+            for result in results:
+                x_id = result['doc_id']
+                if(user_id == x_id):
+                    todayResults.append(result)
         
         if todayResults:
             return todayResults[-1]

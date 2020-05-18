@@ -76,11 +76,20 @@ class UserByToken(Resource):
 
         user_e = UserModel.find_by_email(user_email)
         doc_e = DocModel.find_by_email(user_email)
+        admin_e = AdminModel.find_by_email(user_email)
 
         user = UserModel.find_by_id(user_id)
         doc = DocModel.find_by_id(user_id)
-        if not user and not doc:
+        admin = AdminModel.find_by_id(user_id)
+
+
+        if not user and not doc and not admin:
            return {'message': 'User not found'}, 404
+
+        if admin and admin_e :
+            do = DocModel.query.paginate().total
+            pat = UserModel.query.paginate().total
+            return admin.json(do, pat)
 
         if doc and doc_e :
             return doc.jsonAll()

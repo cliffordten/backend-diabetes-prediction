@@ -1,27 +1,39 @@
 from db import db
 
 
-class AskQuestionModel(db.Model):
-    __tablename__ = 'askquestion'
+class ResponseModel(db.Model):
+    __tablename__ = 'response'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80))
-    question = db.Column(db.String(80))
-    tag = db.Column(db.String(80))
+    response = db.Column(db.String(80))
     date = db.Column(db.String(80))
     time = db.Column(db.String(80))
+    name = db.Column(db.String(80))
 
-    doc_id = db.Column(db.Integer, db.ForeignKey('doctors.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    askquestion_id = db.Column(db.Integer, db.ForeignKey('askquestion.id'))
 
-    users = db.relationship('UserModel')
-    docs = db.relationship('DocModel')
+    askquestion = db.relationship('AskQuestionModel')
 
-    def __init__(self, title, question, tag, date, time, user_id, doc_id):
-        self.title = title
-        self.question = question
-        self.tag = tag
+    def __init__(self, response, date, time, name, askquestion_id):
+        self.response = response
         self.date = date
         self.time = time
-        self.user_id = user_id
-        self.doc_id = doc_id
+        self.name = name
+        self.askquestion_id = askquestion_id
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def json(self):
+        return {
+        "response": self.response,
+        "date": self.date,
+        "time": self.time, 
+        "name": self.name,
+        "askquestion_id": self.askquestion_id,
+    }
+
+    @classmethod
+    def find_all_by_qid(cls, askquestion_id):
+        return cls.query.filter_by(askquestion_id= askquestion_id).all()

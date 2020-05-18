@@ -9,6 +9,9 @@ from resources.question import CreateQuestion, Question, GetAllQuestions
 from resources.answer import Answer, GetUserAnswerById, GetTodayAnswer, GetAllAnswers
 from resources.result import Result, GetTodayResult, GetAllResults
 from resources.doctor import DocRegister
+from resources.askquestion import AskQuestion
+from resources.response import Response
+from resources.admin import AdminRegister, CreateDoctors, GetAllHosDoctors
  
 app = Flask(__name__)
 api = Api(app)
@@ -49,6 +52,13 @@ api.add_resource(GetAllAnswers, '/api/v1/answer/all')
 api.add_resource(Result, '/api/v1/user/result')
 api.add_resource(GetTodayResult, '/api/v1/user/result/now')
 api.add_resource(GetAllResults, '/api/v1/user/result/all')
+
+api.add_resource(AskQuestion, '/api/v1/user/askquestion')
+api.add_resource(Response, '/api/v1/user/response/<int:qid>')
+
+api.add_resource(AdminRegister, '/api/v1/admin')
+api.add_resource(CreateDoctors, '/api/v1/add/doctor')
+api.add_resource(GetAllHosDoctors, '/api/v1/all/doctor')
 
 
 if __name__ == '__main__':

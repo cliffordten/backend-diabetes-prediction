@@ -15,7 +15,7 @@ class Answer(Resource):
     @jwt_required
     def post(self):
         data = request.get_json()
-        IBM = data['weight'] / (data["height"]) ** 2
+        IBM = data['weight'] / ((data["height"]) ** 2)
         data['BMI'] = round(IBM, 2)
         data['date'] = str(date.today())
         data['time'] = str(datetime.now().time())
@@ -54,13 +54,13 @@ class Answer(Resource):
         if value == 0:
             className = "none"
             message = "You don't have diabetes"
-            sub_message = "Continue leaving a healthy life sytle"
+            sub_message = "Congratulation, Continue leaving a healthy life sytle"
             result = ResultModel(className, message, sub_message, data['date'], data['time'], data['user_id'], data['doc_id'], answer.id)
             result.save_to_db()
         elif value == 1:
             className = "error"
             message = "You have diabetes"
-            sub_message = "Contact a doctor as soon as possible"
+            sub_message = "Don't Pannic, Contact your doctor as soon as possible"
             result = ResultModel(className, message, sub_message, data['date'], data['time'], data['user_id'], data['doc_id'], answer.id)
             result.save_to_db()
         else:
@@ -73,6 +73,7 @@ class Answer(Resource):
                 "id": answer.id,
                 'user_id': _id
                 }, 201
+                
     @jwt_required
     def get(self):
         user_id = get_jwt_identity()[0]

@@ -5,7 +5,7 @@ from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import create_access_token, create_refresh_token
 
 from models.user import UserModel
-from models.admin import AdminModel
+from models.hosdoctors import HosDoctorsModel
 from models.doctor import DocModel
 import time
 
@@ -26,8 +26,8 @@ class DocRegister(Resource):
         data['weight'] = 'None'
         data['height'] = 'None'
 
-        # if not AdminModel.find_doc_by_code(data['admincode']):
-            # return { "message": "Invalid Code From Admin \n Please contact hospital admin to add you as doctor"}, 400
+        if not HosDoctorsModel.find_doc_by_code(data['adminCode']):
+            return { "message": "Invalid Code From Admin \n Please contact hospital admin to add you as doctor"}, 400
 
         if DocModel.find_by_email(data['email']):
             return {"message": "Doctor already exists"}, 400
